@@ -111,6 +111,9 @@ public:
 		_pythonSamplingClass = PyObject_CallObject(object,createArgs);
 		Py_XDECREF(object);
 
+		if (PyErr_Occurred())
+                PyErr_Print();
+
 		
 	}
 
@@ -134,6 +137,8 @@ public:
 		PyObject_CallMethodObjArgs(_pythonSamplingClass, PyUnicode_FromString((char*) "build"),ns,NULL);
 		
 		PyGILState_Release(state);
+		if (PyErr_Occurred())
+                PyErr_Print();
 		Py_XDECREF(ns);
 	}
 
@@ -188,6 +193,8 @@ public:
 		}
 		Py_XDECREF(position);
 		Py_XDECREF(values);
+		if (PyErr_Occurred())
+                PyErr_Print();
 
 		// fprintf(stderr,"Result: %s\n", PyBytes_AS_STRING(PyUnicode_AsEncodedString(PyObject_Repr(resultObject), "utf-8", "~E~")));
 		if(!PyTuple_Check(resultObject) || PyTuple_GET_SIZE(resultObject)!=2){
