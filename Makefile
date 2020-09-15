@@ -1,7 +1,7 @@
-CXXFLAGS+= -std=c++17 -g
-INC+=-I../../../include -I../../../include_interfaces -I/opt/local/Library/Frameworks/Python.framework/Versions/3.8/include/python3.8/ -I$(shell python3.8 -c "import numpy; print(numpy.get_include())") -DNPY_NO_DEPRECATED_API
-LIB_PATH+=-L$(DEST_DIR_EXTENSION) -L/opt/local/Library/Frameworks/Python.framework/Versions/3.8/lib/
-LDFLAGS+= -lg2s -lz -lpython3.8
+CXXFLAGS+= -std=c++17
+INC+=-I../../../include -I../../../include_interfaces -I$(shell python3 -c "from sysconfig import get_path; print(get_path('include'))")/ -I$(shell python3 -c "import numpy; print(numpy.get_include())") -DNPY_NO_DEPRECATED_API
+LIB_PATH+=-L$(DEST_DIR_EXTENSION) -L$(shell python3 -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))") $(shell python3 -c "import sysconfig; print(sysconfig.get_config_var('LINKFORSHARED'))")
+LDFLAGS+= -lg2s -lz $(shell python3 -c "import sysconfig; print(sysconfig.get_config_var('BLDLIBRARY'))")
 
 %.o: src/%.cpp 
 	$(CXX) -c -o $@ $< $(CFLAGS) $(CXXFLAGS) $(INC) $(LIBINC)
